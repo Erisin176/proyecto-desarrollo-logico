@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora de Física</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        
+        .container {
+            background: white;
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            padding: 30px;
+            max-width: 500px;
+            width: 100%;
+            animation: slideIn 0.5s ease-out;
+        }
+        
+        @keyframes slideIn {
+            from { transform: translateY(-20px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+        
+        h1 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 10px;
+            font-size: 2em;
+        }
+        
+        .subtitle {
+            text-align: center;
+            color: #666;
+            margin-bottom: 30px;
+            font-size: 1.1em;
+        }
+        
+        .menu {
+            display: block;
+        }
+        
+        .calculator {
+            display: none;
+        }
+        
+        .menu-btn {
+            display: block;
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            background: linear-gradient(135deg, #4CAF50, #45a049);
+            color: white;
+            border: none;
+            border-radius: 10px;
+            font-size: 1.1em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+        }
+        
+        .menu-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+        }
+        
+        .menu-btn:active {
+            transform: translateY(0);
+        }
+        
+        .form-group {
+            margin-bottom: 20px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+            font-weight: 500;
+        }
+        
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #ddd;
+            border-radius: 8px;
+            font-size: 1em;
+            transition: border-color 0.3s ease;
+        }
+        
+        input:focus {
+            outline: none;
+            border-color: #667eea;
+        }
+        
+        .btn {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            font-size: 1em;
+            cursor: pointer;
+            margin: 5px;
+            transition: all 0.3s ease;
+        }
+        
+        .btn:hover {
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0,0,0,0.2);
+        }
+        
+        .btn-back {
+            background: linear-gradient(135deg, #ff6b6b, #ee5a52);
+        }
+        
+        .result {
+            background: #f8f9fa;
+            padding: 20px;
+            border-radius: 10px;
+            margin-top: 20px;
+            border-left: 4px solid #4CAF50;
+        }
+        
+        .result h3 {
+            color: #333;
+            margin-bottom: 10px;
+        }
+        
+        .result p {
+            color: #666;
+            font-size: 1.1em;
+            font-weight: 500;
+        }
+        
+        .calculator-title {
+            color: #333;
+            margin-bottom: 20px;
+            font-size: 1.3em;
+            text-align: center;
+        }
+        
+        .error {
+            background: #ffebee;
+            color: #c62828;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            border-left: 4px solid #c62828;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🔬 Proyecto de Desarrollo Lógico</h1>
+        <p class="subtitle">Resuelve problemas de física y cálculo</p>
+        
+        <div class="menu" id="menu">
+            <button class="menu-btn" onclick="showCalculator(1)">
+                🚀 Calcular rapidez de un bloque
+                <br><small>Bloque en reposo con fuerza horizontal constante</small>
+            </button>
+            
+            <button class="menu-btn" onclick="showCalculator(2)">
+                🪜 Velocidad de escalera resbalando
+                <br><small>Escalera contra muro con base alejándose</small>
+            </button>
+            
+            <button class="menu-btn" onclick="showCalculator(3)">
+                ⚖️ Componente de peso en Y
+                <br><small>Objeto en reposo con inclinación y masa</small>
+            </button>
+        </div>
+        
+        <!-- Calculadora 1: Rapidez del bloque -->
+        <div class="calculator" id="calc1">
+            <h2 class="calculator-title">🚀 Rapidez del Bloque</h2>
+            
+            <div class="form-group">
+                <label for="fuerza">Fuerza aplicada (N):</label>
+                <input type="number" id="fuerza" step="any" placeholder="Ingrese la fuerza">
+            </div>
+            
+            <div class="form-group">
+                <label for="distancia">Distancia recorrida (m):</label>
+                <input type="number" id="distancia" step="any" placeholder="Ingrese la distancia">
+            </div>
+            
+            <div class="form-group">
+                <label for="masa">Masa del objeto (kg):</label>
+                <input type="number" id="masa" step="any" placeholder="Ingrese la masa">
+            </div>
+            
+            <button class="btn" onclick="calcularRapidez()">Calcular</button>
+            <button class="btn btn-back" onclick="showMenu()">Volver</button>
+            
+            <div id="result1"></div>
+        </div>
+        
+        <!-- Calculadora 2: Velocidad de escalera -->
+        <div class="calculator" id="calc2">
+            <h2 class="calculator-title">🪜 Velocidad de Escalera</h2>
+            
+            <div class="form-group">
+                <label for="longitud">Longitud de la escalera (m):</label>
+                <input type="number" id="longitud" step="any" placeholder="Ingrese la longitud">
+            </div>
+            
+            <div class="form-group">
+                <label for="distancia_base">Distancia de la base al muro (m):</label>
+                <input type="number" id="distancia_base" step="any" placeholder="Ingrese la distancia">
+            </div>
+            
+            <div class="form-group">
+                <label for="velocidad_base">Velocidad de alejamiento de la base (m/s):</label>
+                <input type="number" id="velocidad_base" step="any" placeholder="Ingrese la velocidad">
+            </div>
+            
+            <button class="btn" onclick="calcularEscalera()">Calcular</button>
+            <button class="btn btn-back" onclick="showMenu()">Volver</button>
+            
+            <div id="result2"></div>
+        </div>
+        
+        <!-- Calculadora 3: Componente de peso -->
+        <div class="calculator" id="calc3">
+            <h2 class="calculator-title">⚖️ Componente de Peso en Y</h2>
+            
+            <div class="form-group">
+                <label for="masa_obj">Masa del objeto (kg):</label>
+                <input type="number" id="masa_obj" step="any" placeholder="Ingrese la masa">
+            </div>
+            
+            <div class="form-group">
+                <label for="angulo">Inclinación de la superficie (grados):</label>
+                <input type="number" id="angulo" step="any" placeholder="Ingrese el ángulo">
+            </div>
+            
+            <button class="btn" onclick="calcularComponente()">Calcular</button>
+            <button class="btn btn-back" onclick="showMenu()">Volver</button>
+            
+            <div id="result3"></div>
+        </div>
+    </div>
+
+    <script>
+        // Funciones de física (traducidas de C++)
+        function trabajoBloque(F, d) {
+            return F * d;
+        }
+        
+        function velocidadBloque(W, m) {
+            return Math.sqrt((2 * W) / m);
+        }
+        
+        function velocidadEscalera(L, x, dx_dt) {
+            const y = Math.sqrt(Math.pow(L, 2) - Math.pow(x, 2));
+            return -(x * dx_dt) / y;
+        }
+        
+        function calculaComponente(theta, Pkg) {
+            const rad = theta * Math.PI / 180.0;
+            return (Pkg * 9.8) * Math.cos(rad);
+        }
+        
+        // Funciones de interfaz
+        function showMenu() {
+            document.getElementById('menu').style.display = 'block';
+            document.querySelectorAll('.calculator').forEach(calc => {
+                calc.style.display = 'none';
+            });
+        }
+        
+        function showCalculator(num) {
+            document.getElementById('menu').style.display = 'none';
+            document.querySelectorAll('.calculator').forEach(calc => {
+                calc.style.display = 'none';
+            });
+            document.getElementById('calc' + num).style.display = 'block';
+        }
+        
+        function showResult(elementId, title, value, unit) {
+            const resultDiv = document.getElementById(elementId);
+            resultDiv.innerHTML = `
+                <div class="result">
+                    <h3>${title}</h3>
+                    <p>${value.toFixed(4)} ${unit}</p>
+                </div>
+            `;
+        }
+        
+        function showError(elementId, message) {
+            const resultDiv = document.getElementById(elementId);
+            resultDiv.innerHTML = `
+                <div class="error">
+                    <strong>Error:</strong> ${message}
+                </div>
+            `;
+        }
+        
+        // Calculadoras
+        function calcularRapidez() {
+            const fuerza = parseFloat(document.getElementById('fuerza').value);
+            const distancia = parseFloat(document.getElementById('distancia').value);
+            const masa = parseFloat(document.getElementById('masa').value);
+            
+            if (!fuerza || !distancia || !masa) {
+                showError('result1', 'Por favor ingrese todos los valores');
+                return;
+            }
+            
+            if (masa <= 0) {
+                showError('result1', 'La masa debe ser mayor que 0');
+                return;
+            }
+            
+            const trabajo = trabajoBloque(fuerza, distancia);
+            const velocidad = velocidadBloque(trabajo, masa);
+            
+            showResult('result1', 'Rapidez del bloque:', velocidad, 'm/s');
+        }
+        
+        function calcularEscalera() {
+            const longitud = parseFloat(document.getElementById('longitud').value);
+            const distanciaBase = parseFloat(document.getElementById('distancia_base').value);
+            const velocidadBase = parseFloat(document.getElementById('velocidad_base').value);
+            
+            if (!longitud || !distanciaBase || !velocidadBase) {
+                showError('result2', 'Por favor ingrese todos los valores');
+                return;
+            }
+            
+            if (distanciaBase >= longitud) {
+                showError('result2', 'La distancia de la base debe ser menor que la longitud de la escalera');
+                return;
+            }
+            
+            const velocidad = velocidadEscalera(longitud, distanciaBase, velocidadBase);
+            
+            showResult('result2', 'Velocidad de la parte superior:', Math.abs(velocidad), 'm/s');
+        }
+        
+        function calcularComponente() {
+            const masa = parseFloat(document.getElementById('masa_obj').value);
+            const angulo = parseFloat(document.getElementById('angulo').value);
+            
+            if (!masa || angulo === '' || isNaN(angulo)) {
+                showError('result3', 'Por favor ingrese todos los valores');
+                return;
+            }
+            
+            if (masa <= 0) {
+                showError('result3', 'La masa debe ser mayor que 0');
+                return;
+            }
+            
+            const componente = calculaComponente(angulo, masa);
+            
+            showResult('result3', 'Componente de peso en Y:', componente, 'N');
+        }
+    </script>
+</body>
+</html>
